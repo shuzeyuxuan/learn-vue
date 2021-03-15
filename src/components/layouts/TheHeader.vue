@@ -9,10 +9,10 @@
           <span class="icon-bar"></span>
         </button>
 
-        <a href="/" class="navbar-brand">
-          <span class="title">{{ logo.title }}</span>
+        <router-link to="/" class="navbar-brand">
           <img :src="logo.src" :alt="logo.title" />
-        </a>
+          <span class="title">{{ logo.title }}</span>
+        </router-link>
       </div>
 
       <div
@@ -28,14 +28,22 @@
             <a href="#" @click="changeNavIndex(index)">{{ item }}</a>
           </li>
         </ul>
+
+        <!-- 入口组件 -->
+        <TheEntry/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import TheEntry from "./TheEntry";
+
 export default {
   name: "TheHeader",
+  components: {
+    TheEntry,
+  },
   data() {
     return {
       logo: {
@@ -52,8 +60,8 @@ export default {
       this.activeNavIndex = index;
     },
     toggleNav() {
-        this.showCollapsedNav = !this.showCollapsedNav;
-    }
+      this.showCollapsedNav = !this.showCollapsedNav;
+    },
   },
 };
 </script>
