@@ -79,7 +79,6 @@
 
 <script>
 import createCaptcha from "@/utils/createCaptcha.js";
-import ls from "../../utils/localStorage.js";
 
 export default {
   name: "Register",
@@ -123,10 +122,10 @@ export default {
         const user = {
           name: this.username,
           password: this.password,
-          avatar: `https://api.adorable.io/avatars/200/${this.username}.png`,
+          avatar: require('../../assets/avatar.jpg'),
         };
 
-        const localUser = ls.getItem("user");
+        const localUser = this.$store.state.user;
 
         if (localUser && localUser.name === user.name) {
           this.showMsg("用户名已存在");
@@ -136,7 +135,7 @@ export default {
       }
     },
     login(user) {
-      ls.setItem("user", user);
+      this.$store.dispatch("login", user);
       this.showMsg("注册成功", "success");
     },
     showMsg(msg, type = "warning") {
