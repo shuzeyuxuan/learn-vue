@@ -1,6 +1,9 @@
 <template>
   <div class="row">
     <div class="col-md-4 col-md-offset-4 floating-box">
+      <!-- 消息组件 -->
+      <Message :show.sync="msgShow" :type="msgType" :msg="msg" />
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">请注册</h3>
@@ -10,6 +13,7 @@
           <div class="form-group">
             <label class="control-label">用户名</label>
             <input
+              v-model.trim="username"
               v-validator:input.required="{
                 regex: /^[a-zA-Z]+\w*\s?\w*$/,
                 error: '用户名要求以字母开头的单词字符',
@@ -23,6 +27,7 @@
             <label class="control-label">密码</label>
             <input
               id="password"
+              v-model.trim="password"
               v-validator.required="{
                 regex: /^\w{6,16}$/,
                 error: '密码要求 6 ~ 16 个单词字符',
@@ -35,6 +40,7 @@
           <div class="form-group">
             <label class="control-label">确认密码</label>
             <input
+              v-model.trim="cpassword"
               v-validator.required="{ target: '#password' }"
               type="password"
               class="form-control"
@@ -44,6 +50,7 @@
           <div class="form-group">
             <label class="control-label">图片验证码</label>
             <input
+              v-model.trim="captcha"
               v-validator.required="{ title: '图片验证码' }"
               type="text"
               class="form-control"
@@ -52,12 +59,16 @@
           </div>
           <div
             class="thumbnail"
-            @click="getCaptcha"
             title="点击图片重新获取验证码"
+            @click="getCaptcha"
           >
             <div class="captcha vcenter" v-html="captchaTpl"></div>
           </div>
-          <button type="submit" class="btn btn-lg btn-success btn-block">
+          <button
+            type="submit"
+            class="btn btn-lg btn-success btn-block"
+            @click="register"
+          >
             <i class="fa fa-btn fa-sign-in"></i> 注册
           </button>
         </div>
@@ -68,12 +79,20 @@
 
 <script>
 import createCaptcha from "@/utils/createCaptcha.js";
+import ls from "../../utils/localStorage.js";
 
 export default {
   name: "Register",
   data() {
     return {
       captchaTpl: "", // 验证码模板
+      username: "", // 用户名
+      password: "", // 密码
+      cpassword: "", // 确认密码
+      captcha: "", // 验证码
+      msg: "", // 消息内容
+      msgType: "", // 消息类型
+      msgShow: false, // 是否显示消息
     };
   },
   created() {
@@ -85,6 +104,49 @@ export default {
 
       this.captchaTpl = tpl;
       this.localCaptcha = captcha;
+    },
+    register(e) {
+      setTimeout(() => {
+        const target =
+          e.target.type === "submit" ? e.target : e.target.parentElement;
+
+        if (target.canSubmit) {
+          this.submit();
+        }
+      });
+    },
+    submit() {
+      if (this.captcha.toUpperCase() !== this.localCaptcha) {
+        this.showMsg("验证码不正确");
+        this.getCaptcha();
+      } else {
+        const user = {
+          name: this.username,
+          password: this.password,
+          avatar: `https://api.adorable.io/avatars/200/${this.username}.png`,
+        };
+
+        const localUser = ls.getItem("user");
+
+        if (localUser && localUser.name === user.name) {
+          this.showMsg("用户名已存在");
+        } else {
+          this.login(user);
+        }
+      }
+    },
+    login(user) {
+      ls.setItem("user", user);
+      this.showMsg("注册成功", "success");
+    },
+    showMsg(msg, type = "warning") {
+      this.msg = msg;
+      this.msgType = type;
+      this.msgShow = false;
+
+      this.$nextTick(() => {
+        this.msgShow = true;
+      });
     },
   },
 };
