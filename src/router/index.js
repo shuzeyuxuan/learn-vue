@@ -1,22 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import routes from './routes';
 
 Vue.use(Router);
-
-const routes = [
-    // 注册页面
-    {
-        path: '/auth/register',
-        name: 'Register',
-        component: () => import('@/views/auth/Register')
-    },
-    // 首页
-    {
-        path: '/',
-        name: 'Home',
-        component: () => import('@/views/Home')
-    }
-]
 
 const router = new Router({
     mode: 'history',
