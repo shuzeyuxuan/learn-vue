@@ -6,13 +6,18 @@ Vue.use(Router);
 
 const router = new Router({
     mode: 'history',
+    linkExactActiveClass: 'active',
     routes
 });
 
 router.beforeEach((to, from, next) => {
-    const auth = router.app.$options.store.state.auth;
+    let app = router.app;
+    let store = app.$options.store;
+    let auth = store.state.auth;
 
-    if (auth && to.path.indexOf('/auth/') !== -1) {
+    app.$message.hide();
+
+    if ((auth && to.path.indexOf('/auth/') !== -1) || (!auth && to.meta.auth)) {
         next('/');
     } else {
         next();
