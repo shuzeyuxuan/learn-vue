@@ -32,7 +32,7 @@ export const post = ({ commit, state }, { article, articleId }) => {
 
         commit('UPDATE_ARTICLES', articles);
         router.push({
-            name: "Home",
+            name: "Content",
             params: {
                 articleId,
                 showMsg:true

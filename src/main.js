@@ -6,6 +6,7 @@ import './components/index';
 import store from './store/index';
 import VueSweetalert2 from './plugins/vue-sweetalert2';
 import Message from './plugins/message';
+import './filters/index';
 
 // 使用插件
 Vue.use(VueSweetalert2);
