@@ -26,19 +26,19 @@ export default [
                 path: '',
                 name: 'EditProfile',
                 component: () => import('@/views/users/Profile.vue'),
-                meta: { auth: true }
+                meta: {auth: true}
             },
             {
                 path: '/users/1/edit_avatar',
                 name: "EditAvatar",
                 component: () => import('@/views/users/Avatar.vue'),
-                meta: { auth: true }
+                meta: {auth: true}
             },
             {
                 path: '/users/1/edit_password',
                 name: "EditPassword",
                 component: () => import('@/views/users/Password.vue'),
-                meta: { auth: true }
+                meta: {auth: true}
             }
         ]
     },
@@ -46,12 +46,18 @@ export default [
         path: '/articles/create',
         name: 'create',
         component: () => import('@/views/articles/Create.vue'),
-        meta: { auth: true },
+        meta: {auth: true},
     },
     {
         path: "/articles/:articleId/content",
         name: 'Content',
         component: () => import('@/views/articles/Content.vue'),
-    }
+    },
+    {
+        path: '/articles/:articleId/edit',
+        name: 'Edit',
+        component: () => import('@/views/articles/Create'),
+        meta: {auth: true}
+    },
 
 ]
